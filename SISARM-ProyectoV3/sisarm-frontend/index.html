@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISARM - Inteligencia Aduanera</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
+</head>
+<body>
+
+    <header class="hero-header">
+        <div class="hero-overlay">
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">SISARM <span class="text-highlight">Búsqueda Arancelaria</span></h1>
+                    <p class="hero-subtitle">Plataforma inteligente de gestión y clasificación aduanera con análisis de riesgo en tiempo real.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="nav-bar-sticky">
+        <div class="container">
+            <nav class="main-nav">
+                <button class="nav-btn active" onclick="showSection('arancel-search-section', this)">
+                    <span class="nav-icon">🔍</span> Búsqueda
+                </button>
+                <button class="nav-btn" onclick="showSection('historial-section', this)">
+                    <span class="nav-icon">📋</span> Historial
+                </button>
+                <button class="nav-btn" onclick="showSection('stats-section', this)">
+                    <span class="nav-icon">📊</span> Estadísticas
+                </button>
+                
+                <button class="nav-btn" id="nav-btn-novedades" onclick="showSection('novedades-full-section', this)">
+                    <span class="nav-icon">📢</span> Novedades
+                    <span id="novedades-nav-counter" class="novedades-nav-counter hidden"></span>
+                </button>
+                
+                <button class="nav-btn favorites-toggle-btn" onclick="toggleFavoritesPanel()">
+                    ⭐ Favoritos
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container main-content-area">
+        
+        <div id="system-status-bar" class="status-bar hidden">
+            <div class="status-item">
+                <span class="status-icon">🕒</span>
+                <span id="status-date">Cargando estado...</span>
+            </div>
+            <div class="status-separator">|</div>
+            <div class="status-item">
+                <span class="status-icon">🏛️</span>
+                <span id="status-source">-</span>
+            </div>
+            <div class="status-separator">|</div>
+            <div class="status-item">
+                <span class="status-icon">📄</span>
+                <span id="status-ref">-</span>
+            </div>
+        </div>
+
+        <section id="arancel-search-section">
+            
+            <div class="tabs-header-container">
+                <div class="tabs-scroll-area" id="tabs-bar">
+                    <div class="tab-item active" onclick="TabsManager.switchTo('main')">
+                        <span class="tab-icon">🏠</span> Buscador Principal
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs-body-container">
+
+                <div id="tab-content-main" class="tab-content active">
+
+                    <div class="search-box card">
+                        <h3>Búsqueda Predictiva (HS)</h3>
+                        <div class="input-group-row">
+                            <div class="autocomplete-container flex-grow">
+                                <input type="text" id="codigo-input-predictive" placeholder="Ej: 0101.21.00.00" class="big-input">
+                                <ul id="suggestions-list" class="suggestions-list hidden"></ul>
+                            </div>
+                            <input type="text" id="pais-origen-input" placeholder="País Origen (Ej: CL)" class="medium-input">
+                            <input type="text" id="um-facturada-input" placeholder="UM Facturada" class="small-input">
+                            <input type="text" id="cliente-ruc-input-predictive" placeholder="RUC/NIT Cliente" class="medium-input">
+
+                            <button class="btn btn-primary big-btn" disabled title="Buscar">BUSCAR</button>
+                            <button class="btn btn-icon" title="Guardar esta búsqueda" onclick="saveCurrentSearch('predictive')">💾</button>
+                        </div>
+                        <p class="loading-message hidden" id="loading-message">Analizando datos en tiempo real...</p>
+                    </div>
+                    
+                    <div id="alerta-preferencia-container" class="alert-banner hidden"></div>
+                    <div id="alerta-restriccion-container" class="alert-banner hidden"></div>
+
+                    <div class="filter-box card"> 
+                        <h3>Filtro Avanzado por Componentes</h3>
+                        <form id="filter-form-advanced" class="filter-grid">
+                            <div class="form-group">
+                                <label for="filter-capitulo">Capítulo (2)</label>
+                                <input type="text" id="filter-capitulo" maxlength="2" placeholder="01">
+                            </div>
+                            <div class="form-group">
+                                <label for="filter-partida">Partida (4)</label>
+                                <input type="text" id="filter-partida" maxlength="4" placeholder="0101">
+                            </div>
+                            <div class="form-group flex-grow-2">
+                                <label for="filter-subpartida">Subpartida (8+)</label>
+                                <input type="text" id="filter-subpartida" placeholder="0101.21.00.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="cliente-ruc-input-advanced">RUC/NIT Cliente</label>
+                                <input type="text" id="cliente-ruc-input-advanced" placeholder="12345678">
+                            </div>
+                            <div class="form-group" style="display: flex; gap: 10px;">
+                                <button type="submit" class="btn btn-secondary flex-grow">Aplicar Filtro</button>
+                                <button type="button" class="btn btn-icon-secondary" title="Guardar este filtro" onclick="saveCurrentSearch('advanced')">💾</button>
+                            </div>
+                        </form>
+                        <div id="filter-error" class="error-message hidden"></div>
+                    </div>
+                    
+                    <div id="results-container" class="results-container hidden">
+                        <h3 class="section-title">Resultados de la Búsqueda</h3>
+                        <div id="arancel-table-results"></div>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="contextual-section card">
+                            <div class="section-header">
+                                <h4>📖 Notas Legales</h4>
+                                <div class="contextual-search-controls">
+                                    <input type="text" id="contextual-search-input" placeholder="Buscar...">
+                                    <div class="nav-buttons">
+                                        <button id="contextual-prev-btn" disabled>▲</button>
+                                        <button id="contextual-next-btn" disabled>▼</button>
+                                    </div>
+                                    <span class="count-span" id="contextual-count"></span>
+                                </div>
+                            </div>
+                            <div id="notas-legales-content" class="scrollable-content">
+                                <p class="placeholder-text">Seleccione una partida para ver sus notas legales asociadas.</p>
+                            </div>
+                        </div>
+
+                        <div id="documentacion-section" class="contextual-section card">
+                            <div class="section-header">
+                                <h4>📄 Documentación Requerida</h4>
+                            </div>
+                            <div id="documentacion-content" class="scrollable-content">
+                                <p class="placeholder-text">La documentación específica aparecerá aquí.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> <div id="dynamic-tabs-container"></div>
+
+            </div> </section>
+
+        <section id="historial-section" class="hidden">
+            <h2 class="section-title">Historial de Operaciones y Riesgos</h2>
+            <div class="filter-box card historial-filters">
+                <div class="input-group-row">
+                    <input type="text" id="historial-search" placeholder="Buscar por RUC, Partida, DUI..." class="flex-grow">
+                    <select id="historial-marcador-riesgo">
+                        <option value="">Todos los Riesgos</option>
+                        <option value="ALTO">🔴 Alto Riesgo</option>
+                        <option value="MEDIO">🟡 Medio Riesgo</option>
+                        <option value="BAJO">🟢 Bajo Riesgo</option>
+                    </select>
+                    <input type="text" id="historial-start-date" placeholder="Inicio (YYYY-MM-DD)" class="small-input">
+                    <input type="text" id="historial-end-date" placeholder="Fin (YYYY-MM-DD)" class="small-input">
+                    <button id="btn-filter-historial" class="btn btn-primary">Filtrar Historial</button>
+                    <button class="btn btn-icon" title="Guardar este filtro de historial" onclick="saveCurrentSearch('historial')">💾</button>
+                </div>
+            </div>
+            <div id="historial-table-results" class="table-responsive card-look">
+                <p class="loading-message hidden" id="historial-loading-message">Cargando historial...</p>
+                <p id="historial-load-time" class="load-time-info"></p>
+            </div>
+        </section>
+
+        <section id="stats-section" class="hidden">
+            <h2 class="section-title">Panel de Estadísticas</h2>
+            <div class="card">
+                <h3>Promedio de Gravamen Arancelario (GA%) por Capítulo</h3>
+                <div class="table-responsive stats-container">
+                    <table class="arancel-table stats-table" style="min-width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">Capítulo</th>
+                                <th style="text-align: center;">Promedio GA%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stats-table-body">
+                            </tbody>
+                    </table>
+                </div>
+                <p id="stats-loading" class="loading-message hidden">Calculando estadísticas...</p>
+            </div>
+        </section>
+        
+        <section id="novedades-full-section" class="hidden">
+            <h2 class="section-title">Novedades y Modificaciones de Aduana</h2>
+            
+            <div class="novedades-card card">
+                <div class="novedades-header">
+                    <div class="novedades-header-title">
+                        <h3>📢 Últimas Publicaciones</h3>
+                        <span id="novedades-new-counter" class="novedades-new-counter hidden"></span>
+                    </div>
+                </div>
+                
+                <div class="novedades-content-wrapper">
+                    <div class="novedades-filters">
+                        <button class="novedades-btn-filter active" data-filter="all">Todos</button>
+                        <button class="novedades-btn-filter" data-filter="urgente">🔴 Urgentes</button>
+                        <button class="novedades-btn-filter" data-filter="arancel">🟡 Aranceles</button>
+                        <button class="novedades-btn-filter" data-filter="noticia">🔵 Noticias</button>
+                    </div>
+
+                    <ul id="novedades-list" class="novedades-list">
+                        <p class="placeholder-text" style="padding-top: 20px;">Cargando novedades...</p>
+                    </ul>
+                    
+                    <div class="novedades-footer">
+                        <a href="#" id="novedades-historial-link" class="status-link">Ver historial completo</a>
+                        <button id="novedades-mark-read-btn" class="btn btn-secondary btn-small" disabled>Marcar como leídas</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="favorites-panel" class="favorites-panel">
+        <div class="favorites-header">
+            <h3>⭐ Búsquedas Guardadas</h3>
+            <button class="close-panel-btn" onclick="toggleFavoritesPanel()">×</button>
+        </div>
+        <div class="favorites-controls">
+            <small>Ordene sus consultas frecuentes</small>
+        </div>
+        <ul id="favorites-list" class="favorites-list">
+            <p class="placeholder-text" style="padding-top: 20px; font-size: 0.9rem;">No tienes búsquedas guardadas aún.</p>
+        </ul>
+    </div>
+    <div id="panel-overlay" class="panel-overlay hidden" onclick="toggleFavoritesPanel()"></div>
+
+    <div id="pdf-options-modal" class="modal-overlay hidden">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h3>🖨️ Generar Proforma de Costos</h3>
+                <button class="close-modal-btn" onclick="closePDFModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Configure los detalles para la liquidación proforma de la partida: <strong id="pdf-modal-partida"></strong></p>
+                
+                <div class="form-group">
+                    <label for="pdf-cif-value">Valor CIF Estimado ($us)</label>
+                    <input type="number" id="pdf-cif-value" class="big-input" value="10000" min="1">
+                </div>
+
+                <div class="options-grid">
+                    <h4>Secciones a incluir:</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="check-taxes" checked> 🧾 Impuestos Aduaneros (GA, IVA)
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="check-logistics" checked> 🚚 Gastos Logísticos (Estimado)
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="check-fees" checked> 💼 Honorarios de Agencia
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePDFModal()">Cancelar</button>
+                <button id="btn-generate-pdf-confirm" class="btn btn-primary">Descargar PDF Oficial</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-notification" class="toast"></div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 SISARM - Sistema de Inteligencia Aduanera. Todos los derechos reservados.</p>
+            
+            <p style="text-align: center; margin-top: 10px;">
+                <a href="#" id="start-tour-btn" class="status-link" style="font-weight: 600; font-size: 0.9rem;">
+                    ❓ Iniciar Recorrido Interactivo
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
+
+    <script src="assets/js/main.js"></script>
+    
+    <script>
+        function showSection(sectionId, btnElement) {
+            // Ocultar todas las secciones principales
+            document.getElementById('arancel-search-section').classList.add('hidden');
+            document.getElementById('historial-section').classList.add('hidden');
+            document.getElementById('stats-section').classList.add('hidden');
+            document.getElementById('novedades-full-section').classList.add('hidden'); // <-- AÑADIDO
+            
+            // Mostrar la sección clickeada
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Manejar botón activo
+            document.querySelectorAll('.nav-btn:not(.favorites-toggle-btn)').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) {
+                btnElement.classList.add('active');
+            }
+
+            // Cargar datos bajo demanda
+            if (sectionId === 'historial-section' && typeof fetchHistorial === 'function') fetchHistorial({});
+            if (sectionId === 'stats-section' && typeof fetchStats === 'function') fetchStats();
+            if (sectionId === 'novedades-full-section' && typeof fetchNovedades === 'function') fetchNovedades(); // <-- AÑADIDO
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ocultar todo excepto la búsqueda al cargar
+            document.getElementById('historial-section').classList.add('hidden'); 
+            document.getElementById('stats-section').classList.add('hidden');
+            document.getElementById('novedades-full-section').classList.add('hidden'); // <-- AÑADIDO
+            document.getElementById('arancel-search-section').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

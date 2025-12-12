@@ -1,0 +1,806 @@
+/* =========================================
+    SISARM - HOJA DE ESTILOS MAESTRA
+    Tema: Dark Tech (Morado)
+    Versión: FINAL (V15 - Novedades como Sección)
+========================================= */
+
+:root {
+    /* --- PALETA DE COLORES --- */
+    --color-primary: #8a2be2;         /* Morado vibrante principal */
+    --color-primary-hover: #9c40f5;   /* Morado más brillante para interacción */
+    --color-dark-bg: #121212;         /* Fondo base de la aplicación */
+    --color-card-bg: #1e1e1e;         /* Fondo para tarjetas y paneles */
+    --color-input-bg: #2d2d2d;        /* Fondo para campos de entrada */
+    --color-text-main: #ffffff;       /* Color de texto principal */
+    --color-text-muted: #b3b3b3;      /* Color de texto secundario */
+    --color-border: #333333;          /* Color para bordes sutiles */
+    
+    /* --- ESTADOS (SEMÁFORO) --- */
+    --color-danger: #ff6666;          /* Rojo suave */
+    --color-warning: #ffcc66;         /* Naranja suave */
+    --color-success: #66cc66;         /* Verde suave */
+
+    /* --- VARIABLES DE DISEÑO --- */
+    --shadow-soft: 0 10px 30px -10px rgba(0,0,0,0.5);
+    --radius-md: 6px;
+    --radius-lg: 12px;
+    --header-height: 280px;
+}
+
+/* =========================================
+    1. BASE Y TIPOGRAFÍA
+========================================= */
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--color-dark-bg);
+    color: var(--color-text-main);
+    margin: 0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+    color: var(--color-text-main);
+    margin-top: 0;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* =========================================
+    2. LAYOUT Y ESTRUCTURA
+========================================= */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 25px;
+}
+
+.main-content-area {
+    margin-top: 30px;
+    margin-bottom: 80px;
+}
+
+.card {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-soft);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+h3 {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+h3::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 24px;
+    background-color: var(--color-primary);
+    margin-right: 12px;
+    border-radius: 2px;
+}
+.section-title {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 10px;
+}
+
+/* =========================================
+    3. HEADER HEROICO
+========================================= */
+.hero-header {
+    position: relative;
+    height: var(--header-height);
+    background-color: #000;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-primary);
+}
+.hero-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('../img/sisarm0101.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.6;
+    filter: grayscale(30%) contrast(120%);
+}
+.hero-overlay {
+    position: relative; height: 100%; width: 100%;
+    background: linear-gradient(90deg, rgba(18,18,18,0.95) 0%, rgba(18,18,18,0.7) 60%, transparent 100%);
+    display: flex; align-items: center;
+}
+.hero-content { padding: 0 20px; }
+.hero-title { font-size: 3.5rem; margin-bottom: 10px; line-height: 1; text-transform: uppercase; }
+.text-highlight { color: var(--color-primary); }
+.hero-subtitle { font-size: 1.2rem; color: var(--color-text-muted); max-width: 600px; margin: 0; }
+
+/* =========================================
+    4. NAVEGACIÓN PRINCIPAL (STICKY)
+========================================= */
+.nav-bar-sticky {
+    background-color: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 1000;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.main-nav { display: flex; gap: 5px; }
+.nav-btn {
+    background: none; border: none; color: var(--color-text-muted);
+    padding: 16px 24px; font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s ease;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 3px solid transparent;
+    position: relative; /* Añadido para el contador */
+}
+.nav-btn:hover { color: var(--color-text-main); background-color: rgba(255,255,255,0.05); }
+.nav-btn.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+.nav-icon { font-size: 1.2rem; }
+.favorites-toggle-btn { margin-left: auto; color: var(--color-warning) !important; }
+.favorites-toggle-btn:hover { background-color: rgba(255, 204, 102, 0.1); }
+
+/* NUEVO: Contador en la barra de navegación */
+.novedades-nav-counter {
+    background-color: var(--color-danger);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 4px;
+    line-height: 1;
+}
+
+/* =========================================
+    5. FORMULARIOS Y BOTONES
+========================================= */
+input[type="text"], input[type="number"], select {
+    background-color: var(--color-input-bg);
+    border: 2px solid var(--color-border);
+    color: var(--color-text-main);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 1rem; font-family: inherit;
+    transition: all 0.3s ease; width: 100%; box-sizing: border-box;
+}
+input:focus, select:focus {
+    outline: none; border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.15);
+    background-color: #000;
+}
+input::placeholder { color: #666; }
+
+.flex-grow { flex: 1; } .flex-grow-2 { flex: 2; }
+.big-input { font-size: 1.2rem; }
+.medium-input { width: 180px; }
+.small-input { width: 140px; }
+.full-width { width: 100%; }
+
+.btn {
+    padding: 12px 28px; border: none; border-radius: var(--radius-md);
+    font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-primary { background-color: var(--color-primary); color: #fff; }
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+}
+.btn-secondary { background-color: #3a3a3a; color: var(--color-text-main); border: 1px solid var(--color-border); }
+.btn-secondary:hover { background-color: #4a4a4a; border-color: var(--color-text-muted); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+.btn-icon, .btn-icon-secondary {
+    padding: 0; width: 42px; height: 42px;
+    font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-md); cursor: pointer; flex-shrink: 0;
+}
+.btn-icon { background-color: var(--color-primary); color: #fff; border: none; }
+.btn-icon:hover { background-color: var(--color-primary-hover); }
+.btn-icon-secondary { background-color: #3a3a3a; color: var(--color-text-main); border: 1px solid var(--color-border); }
+.btn-icon-secondary:hover { border-color: var(--color-primary); }
+
+.input-group-row { display: flex; gap: 15px; flex-wrap: wrap; align-items: stretch; }
+.filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; align-items: end; }
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-size: 0.9rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 8px; }
+
+/* =========================================
+    6. TABLAS DE DATOS
+========================================= */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-card-bg);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-card-bg);
+}
+.table-responsive::-webkit-scrollbar { height: 8px; }
+.table-responsive::-webkit-scrollbar-track { background: var(--color-card-bg); }
+.table-responsive::-webkit-scrollbar-thumb { background-color: var(--color-primary); border-radius: 4px; }
+
+.arancel-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+}
+.arancel-table th {
+    background-color: #111;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 16px 12px;
+    text-align: center;
+    border-bottom: 3px solid var(--color-primary);
+    white-space: nowrap;
+    vertical-align: middle;
+    position: sticky; top: 0; z-index: 10;
+}
+.arancel-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+    line-height: 1.5;
+    text-align: center;
+    display: table-cell;
+}
+.arancel-table tbody tr { transition: background-color 0.2s ease; }
+.arancel-table tbody tr:hover { background-color: rgba(138, 43, 226, 0.1) !important; }
+.arancel-table tr:last-child td { border-bottom: none; }
+
+/* Ajuste para la última columna de la tabla (Acción) */
+.arancel-table th:last-child,
+.arancel-table td:last-child {
+    text-align: center;
+    min-width: 100px;
+    white-space: nowrap;
+}
+/* Asegurar que el botón dentro de la celda esté centrado */
+.arancel-table td .btn-icon-secondary {
+    margin: 0 auto;
+    display: flex;
+}
+
+.arancel-table th:nth-child(1), .arancel-table td:nth-child(1) { text-align: left; min-width: 100px; }
+.arancel-table th:nth-child(2), .arancel-table td:nth-child(2) { text-align: left; min-width: 250px; max-width: 450px; }
+
+.center-text { text-align: center !important; }
+.stats-table td, .stats-table th { text-align: center; font-size: 1.1rem; }
+
+/* =========================================
+    7. SECCIONES CONTEXTUALES (NOTAS/DOCS)
+========================================= */
+.contextual-section {
+    height: 400px; display: flex; flex-direction: column;
+    padding: 0; overflow: hidden;
+}
+.section-header {
+    background-color: #151515; padding: 15px 20px;
+    border-bottom: 1px solid var(--color-border);
+    display: flex; justify-content: space-between; align-items: center;
+}
+.section-header h4 { margin: 0; font-size: 1.1rem; }
+.scrollable-content {
+    flex-grow: 1; overflow-y: auto; padding: 20px;
+    background-color: var(--color-input-bg);
+}
+.contextual-search-controls { display: flex; gap: 10px; align-items: center; }
+.contextual-search-controls input { padding: 6px 10px; font-size: 0.9rem; width: 150px; }
+.nav-buttons button {
+    background: var(--color-card-bg); border: 1px solid var(--color-border);
+    color: var(--color-text-main); width: 30px; height: 30px;
+    border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.nav-buttons button:disabled { opacity: 0.3; }
+.count-span { font-size: 0.85rem; color: var(--color-text-muted); }
+
+/* =========================================
+    8. ELEMENTOS UI (ALERTAS, TOOLTIPS)
+========================================= */
+.alert-banner { padding: 15px 20px; border-radius: var(--radius-md); margin-bottom: 25px; background-color: var(--color-card-bg); border-left: 5px solid; font-weight: 500; }
+.alert-green { border-color: var(--color-success); color: #e0ffe0; background: rgba(102, 204, 102, 0.15); }
+.alert-yellow { border-color: var(--color-warning); color: #fff5e0; background: rgba(255, 204, 102, 0.15); }
+.alert-red { border-color: var(--color-danger); color: #ffe0e0; background: rgba(255, 102, 102, 0.15); }
+
+.autocomplete-container { position: relative; }
+.suggestions-list {
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--color-card-bg); border: 1px solid var(--color-primary); border-top: none;
+    border-radius: 0 0 var(--radius-md) var(--radius-md); z-index: 100;
+    max-height: 300px; overflow-y: auto; margin: 0; padding: 0; list-style: none;
+    box-shadow: var(--shadow-soft);
+}
+.suggestions-list li { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid var(--color-border); }
+.suggestions-list li:hover, .suggestions-list li.autocomplete-active { background-color: var(--color-primary); color: #fff; }
+
+.arancel-table td[data-label="Riesgo"] { display: flex !important; align-items: center !important; height: 100%; }
+.risk-marker {
+    display: inline-flex !important; min-width: 12px !important; height: 12px !important;
+    border-radius: 50%; margin-right: 12px !important; position: relative !important;
+    flex-shrink: 0; cursor: help;
+}
+.risk-marker.alto { background-color: var(--color-danger); box-shadow: 0 0 8px var(--color-danger); }
+.risk-marker.medio { background-color: var(--color-warning); box-shadow: 0 0 8px var(--color-warning); }
+.risk-marker.bajo { background-color: var(--color-success); box-shadow: 0 0 8px var(--color-success); }
+.risk-tooltip {
+    visibility: hidden; opacity: 0; position: absolute; bottom: 140%; left: 50%;
+    transform: translateX(-50%); background-color: #222; color: var(--color-text-main);
+    text-align: center; padding: 10px 14px; border-radius: 6px; font-size: 0.85rem;
+    white-space: normal; width: max-content; max-width: 250px; z-index: 1000;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid var(--color-border);
+    transition: all 0.2s ease; pointer-events: none;
+}
+.risk-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #222 transparent transparent transparent; }
+.risk-marker:hover .risk-tooltip { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(-5px); }
+
+/* =========================================
+    9. VÍNCULOS INTERACTIVOS
+========================================= */
+.tariff-link { color: var(--color-primary); font-weight: 700; text-decoration: none; border-bottom: 1px dotted var(--color-primary); cursor: pointer; }
+.tariff-link:hover { background-color: var(--color-primary); color: #fff; }
+.highlight { background-color: var(--color-warning); color: #000; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+.highlight.active { background-color: #fff; box-shadow: 0 0 10px #fff; }
+
+/* =========================================
+    10. PANEL DE FAVORITOS
+========================================= */
+.favorites-panel {
+    position: fixed; top: 0; right: -400px; width: 360px; height: 100vh;
+    background-color: #151515; border-left: 2px solid var(--color-primary);
+    z-index: 2000; box-shadow: -10px 0 40px rgba(0,0,0,0.7);
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+}
+.favorites-panel.open { right: 0; }
+.favorites-header {
+    background-color: #0a0a0a; padding: 20px 60px 20px 20px;
+    display: flex; align-items: center; border-bottom: 1px solid var(--color-border);
+    position: relative;
+}
+.favorites-header h3 {
+    margin: 0; font-size: 1.2rem; width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: 10px; text-align: center;
+}
+.close-panel-btn {
+    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--color-text-muted); font-size: 2rem;
+    cursor: pointer; line-height: 1; padding: 0;
+}
+.close-panel-btn:hover { color: var(--color-primary); }
+.favorites-controls { padding: 12px 20px; background-color: #1e1e1e; border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); font-size: 0.9rem; }
+.favorites-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1; }
+.favorite-item {
+    padding: 18px 20px; border-bottom: 1px solid var(--color-border);
+    cursor: pointer; transition: all 0.2s ease;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.favorite-item:hover { background-color: rgba(138, 43, 226, 0.08); padding-left: 25px; }
+.fav-info { flex-grow: 1; margin-right: 15px; }
+.fav-name { font-weight: 700; color: var(--color-text-main); margin-bottom: 6px; display: block; font-size: 1.05rem; }
+.fav-details { font-size: 0.85rem; color: var(--color-text-muted); display: block; }
+.fav-actions { display: flex; opacity: 0.5; transition: opacity 0.2s; align-items: center; }
+.favorite-item:hover .fav-actions { opacity: 1; }
+.fav-action-btn { background: none; border: none; cursor: pointer; font-size: 1.3rem; padding: 0; color: var(--color-text-muted); transition: color 0.2s; display: flex; align-items: center; justify-content: center; line-height: 1; }
+.fav-action-btn:hover.delete { color: var(--color-danger); }
+.panel-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background-color: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 1999;
+}
+
+/* =========================================
+    11. SISTEMA DE PESTAÑAS (TABS)
+========================================= */
+.tabs-header-container {
+    background-color: #000; padding: 0 10px;
+    border-bottom: 2px solid var(--color-border); margin-bottom: 20px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0; overflow: hidden;
+}
+.tabs-scroll-area {
+    display: flex; gap: 5px; overflow-x: auto; padding-top: 10px;
+    scrollbar-width: thin; scrollbar-color: var(--color-primary) #222;
+}
+.tabs-scroll-area::-webkit-scrollbar { height: 4px; }
+.tabs-scroll-area::-webkit-scrollbar-track { background: #222; }
+.tabs-scroll-area::-webkit-scrollbar-thumb { background-color: var(--color-primary); border-radius: 2px; }
+.tab-item {
+    background-color: #2a2a2a; color: var(--color-text-muted);
+    padding: 12px 20px; border-radius: 8px 8px 0 0;
+    cursor: pointer; font-weight: 600; font-size: 0.9rem; white-space: nowrap;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.2s ease; border: 1px solid transparent; border-bottom: none;
+    position: relative; top: 2px;
+}
+.tab-item:hover { background-color: #333; color: var(--color-text-main); }
+.tab-item.active {
+    background-color: var(--color-card-bg); color: var(--color-primary);
+    border-color: var(--color-border); border-bottom-color: var(--color-card-bg); z-index: 2;
+}
+.tab-icon { opacity: 0.7; }
+.tab-close-btn {
+    background: none; border: none; color: var(--color-text-muted);
+    font-size: 1.2rem; line-height: 0.8; margin-left: 8px;
+    padding: 0 4px; border-radius: 4px; cursor: pointer; opacity: 0.6; transition: all 0.2s;
+}
+.tab-close-btn:hover { opacity: 1; color: var(--color-danger); background-color: rgba(255, 68, 68, 0.15); }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+/* =========================================
+    12. BARRA DE ESTADO (HU-UPDATE)
+========================================= */
+.status-bar {
+    display: flex; justify-content: center; align-items: center;
+    padding: 12px 20px; background-color: rgba(30,30,30,0.6);
+    border: 1px solid var(--color-border); border-radius: var(--radius-md);
+    margin-bottom: 25px; font-size: 0.9rem; color: var(--color-text-muted);
+    backdrop-filter: blur(5px);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.status-bar.warning {
+    background-color: rgba(255, 187, 51, 0.15) !important;
+    border-color: var(--color-warning) !important;
+    color: #ffeeba !important;
+}
+.status-bar.danger {
+    background-color: rgba(255, 102, 102, 0.15) !important;
+    border-color: var(--color-danger) !important;
+    color: #ffe0e0 !important;
+}
+.status-item { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.status-icon { font-size: 1.1rem; opacity: 0.8; }
+.status-link {
+    color: var(--color-primary-hover);
+    text-decoration: none; border-bottom: 1px dotted var(--color-primary);
+    transition: all 0.2s ease; font-weight: 600;
+}
+.status-link:hover { color: #fff; border-bottom-style: solid; }
+.status-separator { margin: 0 5px; opacity: 0.3; color: var(--color-border); }
+
+/* =========================================
+    13. UTILIDADES Y FOOTER
+========================================= */
+.hidden { display: none !important; }
+.error-message { color: var(--color-danger); margin-top: 10px; font-weight: bold; }
+.loading-message { color: var(--color-primary); margin-top: 15px; font-style: italic; }
+.placeholder-text { color: var(--color-text-muted); text-align: center; padding-top: 60px; font-style: italic; opacity: 0.7; }
+.footer { background-color: #0a0a0a; padding: 30px 0; text-align: center; color: var(--color-text-muted); border-top: 1px solid #222; margin-top: 60px; }
+#arancel-table-results { padding: 0 !important; margin: 0 !important; height: auto !important; min-height: 0 !important; }
+
+/* =========================================
+    14. RESPONSIVE
+========================================= */
+@media (max-width: 900px) {
+    .hero-title { font-size: 2.5rem; }
+    .input-group-row, .info-grid { grid-template-columns: 1fr; flex-direction: column; }
+    
+    .status-bar { flex-direction: column; align-items: center; gap: 8px; }
+    .status-separator { display: none; }
+    .favorites-panel { width: 100%; right: -100%; }
+}
+
+/* =========================================
+    15. MODALES (HU-PDF)
+========================================= */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
+    z-index: 3000; display: flex; justify-content: center; align-items: center;
+}
+.modal-content {
+    background-color: var(--color-card-bg); width: 90%; max-width: 500px;
+    padding: 0 !important; overflow: hidden; border: 1px solid var(--color-primary);
+    animation: slideDown 0.3s ease;
+}
+@keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.modal-header {
+    background-color: #000; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 3px solid var(--color-primary);
+}
+.modal-header h3 { margin: 0; font-size: 1.1rem; }
+.close-modal-btn { background: none; border: none; color: var(--color-text-muted); font-size: 2rem; cursor: pointer; line-height: 1; }
+.close-modal-btn:hover { color: var(--color-danger); }
+
+.modal-body { padding: 25px; }
+.modal-footer {
+    padding: 15px 25px; background-color: #151515; border-top: 1px solid var(--color-border);
+    display: flex; justify-content: flex-end; gap: 15px;
+}
+
+.checkbox-label {
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+    padding: 10px; background-color: var(--color-input-bg); border-radius: var(--radius-md);
+    margin-bottom: 8px; transition: all 0.2s;
+}
+.checkbox-label:hover { background-color: #3a3a3a; }
+.checkbox-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--color-primary); }
+.options-grid { margin-top: 20px; display: flex; flex-direction: column; gap: 5px; }
+.options-grid h4 { color: var(--color-primary); margin-bottom: 10px; }
+
+/* =========================================
+    16. NOTIFICACIONES TOAST (HU-PERMALINK)
+========================================= */
+.toast {
+    visibility: hidden; /* Oculto por defecto */
+    min-width: 280px;
+    background-color: var(--color-success); /* Verde éxito */
+    color: #fff;
+    text-align: center;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    position: fixed;
+    z-index: 4000; /* Encima de todo */
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+/* Estilo para errores */
+.toast.error {
+    background-color: var(--color-danger);
+}
+
+/* Animación para mostrar y ocultar */
+.toast.show {
+    visibility: visible;
+    /* Muestra por 3s: 0.5s para entrar, 2s visible, 0.5s para salir */
+    animation: fadeIn_toast 0.5s, fadeOut_toast 0.5s 2.5s;
+}
+
+@keyframes fadeIn_toast {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadeOut_toast {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+/* =========================================
+   17. ESTILOS DEL TUTORIAL (SHEPHERD)
+========================================= */
+
+/* Usamos un tema personalizado para no usar !important */
+.shepherd-element[data-theme="sisarm-dark"] {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-primary);
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--radius-md);
+    max-width: 400px;
+}
+
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-header {
+    background-color: #111;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-title {
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-text {
+    color: var(--color-text-main);
+    padding: 15px 20px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-footer {
+    padding: 10px 20px;
+    background-color: #151515;
+    border-top: 1px solid var(--color-border);
+}
+
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-button {
+    border-radius: var(--radius-md);
+    padding: 8px 16px;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+/* Botón "Siguiente" o "Finalizar" */
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-button.shepherd-button-primary {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-button.shepherd-button-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+/* Botón "Atrás" o "Salir" */
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-button:not(.shepherd-button-primary) {
+    background-color: #3a3a3a;
+    color: var(--color-text-main);
+}
+.shepherd-element[data-theme="sisarm-dark"] .shepherd-button:not(.shepherd-button-primary):hover {
+    background-color: #4a4a4a;
+}
+
+/* Flecha del bocadillo */
+.shepherd-element[data-theme="sisarm-dark"][data-popper-placement^="top"] .shepherd-arrow::before {
+    border-top-color: var(--color-primary);
+}
+.shepherd-element[data-theme="sisarm-dark"][data-popper-placement^="bottom"] .shepherd-arrow::before {
+    border-bottom-color: var(--color-primary);
+}
+.shepherd-element[data-theme="sisarm-dark"][data-popper-placement^="left"] .shepherd-arrow::before {
+    border-left-color: var(--color-primary);
+}
+.shepherd-element[data-theme="sisarm-dark"][data-popper-placement^="right"] .shepherd-arrow::before {
+    border-right-color: var(--color-primary);
+}
+
+/* =========================================
+   18. NOVEDADES DASHBOARD (AHORA ES UNA PÁGINA)
+========================================= */
+
+/* La sección ahora es un .card normal */
+.novedades-card.card {
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.novedades-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.novedades-header-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.novedades-header h3 {
+    margin-bottom: 0; /* Anula el margen de h3 */
+}
+
+/* (VC6) Indicador de nuevas (Dentro del panel) */
+.novedades-new-counter {
+    background-color: var(--color-danger);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 102, 102, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 102, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 102, 102, 0); }
+}
+
+/* (VC8) Filtros */
+.novedades-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 15px;
+}
+.novedades-btn-filter {
+    flex-grow: 1;
+    background-color: #3a3a3a;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.novedades-btn-filter:hover { background-color: #4a4a4a; color: #fff; }
+.novedades-btn-filter.active { background-color: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+/* (VC4) Lista de Novedades */
+.novedades-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    /* Ya no se necesita max-height, la página tiene scroll */
+}
+.novedad-item {
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px 5px;
+}
+.novedad-item:last-child { border-bottom: none; }
+
+.novedad-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+/* (VC3) Etiquetas de Categoría */
+.novedad-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+.label-urgente { background-color: var(--color-danger); color: #fff; }
+.label-arancel { background-color: var(--color-warning); color: #111; }
+.label-noticia { background-color: #4a4a4a; color: var(--color-text-muted); }
+
+/* (VC6) Indicador "Nuevo" */
+.novedad-new-indicator {
+    background-color: var(--color-primary);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+/* (VC7) Título y Resumen */
+.novedad-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin: 0 0 5px 0;
+}
+.novedad-summary {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+/* (VC5) Enlace oficial */
+.novedad-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--color-primary);
+}
+.novedad-link:hover { color: var(--color-primary-hover); }
+
+/* (VC9) Pie de página */
+.novedades-footer {
+    padding-top: 15px;
+    margin-top: 10px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.btn-small { padding: 6px 12px; font-size: 0.8rem; }
